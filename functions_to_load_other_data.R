@@ -59,3 +59,20 @@ load.targets<-function() {
   )
   return(data)
 }
+
+  
+#####################################################################################################################################################
+# load non-native definitions -----------------------------------------------------------------------------------------------------------------------
+# highlights species as category C (established) or E (exotic), with separate coding for breeding and winter due to vagrancy of some species in winter
+#####################################################################################################################################################
+load.non.native.definitions<-function() {
+  cat('speccode = numeric species code\n')
+  cat('non_native_b = species definition for breeding data = C=established, E=exotic\n')
+  cat('non_native_w = species definition for winter data = C=established, E=exotic\n')
+  cat('tenkm = 10-km square\n')
+  data<-read.csv(paste0(path.unix.archive,'birdatlas2007-11/data/lookups/non_native_categories.csv')
+                 ,header=T
+                 ,colClasses=c('numeric','character','character')
+  )
+  return(data)
+}
