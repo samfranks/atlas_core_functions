@@ -185,7 +185,6 @@ load.abundance.change.20km.data<-function() {
 
 #####################################################################################################################################################
 # load change data ----------------------------------------------------------------------------------------------------------------------------------
-# tenkm,speccode,change,interval,season,CBC_CODE
 #####################################################################################################################################################
 load.change.data<-function() {
   cat('tenkm = 10-km square\n')
@@ -247,52 +246,18 @@ load.fixed.effort.ttv.coverage<-function()
 
 
 #####################################################################################################################################################
-#load the safe TTV data for 88-91 -------------------------------------------------------------------------------------------------------------------
+#load the safe-for-fixed-effort-calcs TTV data for 88-91 -------------------------------------------------------------------------------------------------------------------
 #####################################################################################################################################################
-# bird data
-#tenkm,cbc_code,formnum,tetrad_id,visited,pa90,count90
-load.ttv.safe8891.bird<-function() {
+load.ttv.safe8891<-function(ruleset) {
   cat('tenkm = 10-km\n')
+  cat('tetrad_id = tetrad letter\n')
+  cat('n.visits = number of visits\n')
   cat('cbc_code = 2-letter species code\n')
-  cat('formnum = unique identifier of submitted paper form\n')
-  cat('tetrad_id = tetrad letter\n')
-  cat('visited = number of visits\n')
-  cat('pa90 = species was recorded (1/NA)\n')
-  cat('count90 = number of individuals for count species (numeric/NA)\n')
-  data<-read.table(paste0(path.unix.archive,'birdatlas1988-91breed/data2km_safe/gibbons_safe_birds.csv'),
+  cat('present0 = species was recorded (1/NA)\n')
+  cat('count = number of individuals for count species (numeric/NA)\n')
+  data<-read.table(paste0(path.unix.archive,'birdatlas1988-91breed/data2km_safe/excess_coverage_removed_ruleset',ruleset,'.csv'),
                    header=T,sep=",", 
-                   colClasses=c('character','character','numeric','character','numeric','numeric','numeric' ))
-  return(data)
-}
-
-# visit data
-#tenkm,formnum,year,tetrad_id,numvisits
-load.ttv.safe8891.visits<-function() {
-  cat('tenkm = 10-km\n')
-  cat('formnum = unique identifier of submitted paper form\n')
-  cat('year = year to which form relates (88,89,90,91)\n')
-  cat('tetrad_id = tetrad letter\n')
-  cat('numvisits = number of visits to tetrad in this year\n')
-  data<-read.table(paste0(path.unix.archive,'birdatlas1988-91breed/data2km_safe/gibbons_safe_visits.csv'),
-                   header=T,sep=",", 
-                   colClasses=c('character','numeric','numeric','character','numeric'))
-  return(data)
-}
-
-
-
-#####################################################################################################################################################
-# effort summary ------------------------------------------------------------------------------------------------------------------------------------
-#####################################################################################################################################################
-#tenkm,tetrad_id,num_forms,sumvisits
-load.ttv.safe8891.effort<-function() {
-  cat('tenkm = 10-km\n')
-  cat('tetrad_id = tetrad letter\n')
-  cat('num_forms = over how many forms are the data distributed?\n')
-  cat('sumvisits = how many visits in total did this tetrad receive?\n')
-  data<-read.table(paste0(path.unix.archive,'birdatlas1988-91breed/data2km_safe/gibbons_safe_effort.csv'),
-                   header=T,sep=",", 
-                   colClasses=c('character','character','numeric','numeric'))
+                   colClasses=c('character','character','numeric','character','numeric','numeric' ))
   return(data)
 }
 
