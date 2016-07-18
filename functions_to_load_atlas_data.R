@@ -305,16 +305,22 @@ load.coverage.data.10km<-function() {
 ##load 10km presence absence data for 1989-91 atlas
 ################################################################
 
-function() {
+
+load.maxcat1990<-function() {
   cat('speccode = numeric species code\n')
-  cat('species_code = letter code\n')
-  cat('actual_10km = 10tenkm survey carried out\n')
-  cat('published_10km = published 10km squares, differs for sensitive species\n')
-  cat('actual_bs = actual breeding status, seen (s) or breeding (b), differs for sensitive species\n')
-  cat('recorded_bs = published breeding status, seen (s) or breeding (b), differs for sensitive species\n')
-  data<-read.table(paste0(path.unix.archive,'\birdatlas1988-91breed\data10km\gibbonsbysquare.txt'),
-                   header=F,sep="\t", 
-                   colClasses=c('character','character','character','character','character'))
+  cat('cbc_code = 2-letter species code\n')
+  cat('tenkm = 10-km square surveyed\n')
+  cat('tenkm_published = 10-km square as published in the book; may differ for sensitive species\n')
+  cat('cat = actual breeding status, seen (S) or breeding (B)\n')
+  cat('cat_published = breeding status as published in the book, seen (S) or breeding (B); may differ for sensitive species\n')
+  data<-read.fwf(paste0(path.unix.archive,'/birdatlas1988-91breed/data10km/gibbonsbysquare.txt'),
+                 header=F,
+                 widths=c(5,-1,2,-1,4,-1,4,-1,1,-1,1),
+                 col.names = c('speccode','cbc_code','tenkm','tenkm_published','cat','cat_published'),
+                 colClasses=c('numeric',rep('character',5))
+  )
   return(data)
-}
+
+
+
 
