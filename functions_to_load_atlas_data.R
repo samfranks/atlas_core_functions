@@ -300,3 +300,21 @@ load.coverage.data.10km<-function() {
   )
   return(data)
 }
+
+#########################################################################
+##load 10km presence absence data for 1989-91 atlas
+################################################################
+
+function() {
+  cat('speccode = numeric species code\n')
+  cat('species_code = letter code\n')
+  cat('actual_10km = 10tenkm survey carried out\n')
+  cat('published_10km = published 10km squares, differs for sensitive species\n')
+  cat('actual_bs = actual breeding status, seen (s) or breeding (b), differs for sensitive species\n')
+  cat('recorded_bs = published breeding status, seen (s) or breeding (b), differs for sensitive species\n')
+  data<-read.table(paste0(path.unix.archive,'\birdatlas1988-91breed\data10km\gibbonsbysquare.txt'),
+                   header=F,sep="\t", 
+                   colClasses=c('character','character','character','character','character'))
+  return(data)
+}
+
