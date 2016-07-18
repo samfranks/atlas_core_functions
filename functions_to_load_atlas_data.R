@@ -320,7 +320,12 @@ load.maxcat1990<-function() {
                  colClasses=c('numeric',rep('character',5))
   )
   return(data)
+<<<<<<< HEAD
 }
 
+=======
+
+}
+>>>>>>> 12dc1668c76c702a6c9edfb69e15036b4183a367
 
 
