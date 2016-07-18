@@ -320,7 +320,7 @@ load.maxcat1990<-function() {
                  colClasses=c('numeric',rep('character',5))
   )
   return(data)
-
+}
 
 
 
