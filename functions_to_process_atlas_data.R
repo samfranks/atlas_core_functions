@@ -78,10 +78,10 @@ limit2chequerboard.britain<-function(indata) {
  
 
 ###function to remove exotic species
-  remove.exotics<-function(indata){
+  remove.exotics<-function(indata,season=C("b","w")){
   non_native<-read.csv(file=paste0(path.unix.archive,'birdatlas2007-11/data/lookups/non_native_categories.csv'),header=T)
   ##subset just to get exotics
-  exotic<-subset(non_native,non_native_b=="E")
+  exotic<-subset(non_native,paste0("non_native_",season)=="E")
   specnames<-load.specnames()
   exotic<-merge(exotic, specnames[,c(1,3)])
   ##want to remove all the species which get E for the non native breeding season
