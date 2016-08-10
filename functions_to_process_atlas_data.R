@@ -89,3 +89,36 @@ limit2chequerboard.britain<-function(indata) {
   return(indata)
   }
   
+  
+  ##function to plot a map of surveyed tetrads/tetrads selected for a certain habitat type
+  ##specify appropriate colour vector
+  ##specify filename for saved plot, needs to end in .tiff or .png or other pciture file type
+  
+  plot.map<-function(indata, country=c("britain", "ireland","channel_isles"), colours,savename){
+    library(ggplot2)
+    library(rgdal)
+
+    map<-readOGR(paste0(path.unix.archive,"birdatlas2007-11/data/lookups/needed/gis_outlines"),paste0("atlas_outline_",country,"_only"))
+    map<-fortify(map)
+    
+  p<-ggplot() +
+    geom_point(data=indata, aes(x =easting, y = northing), colour=colours, size=0.1) +
+    geom_polygon(data=map, aes(x=long, y=lat, Group=group),colour="black", fill=NA)+
+    coord_fixed(ratio=1)+
+    theme(text = element_text(family = "serif")) +
+    theme(plot.margin=unit(c(0.5, 0.5, 0.5, 0.5), "cm")) +
+    theme_bw() +
+    theme(axis.line = element_line(colour = "black"),
+          panel.grid.major = element_blank(),
+          panel.grid.minor = element_blank(),
+          panel.border = element_blank(),
+          panel.background = element_blank(),
+          axis.line=element_blank(),
+          axis.ticks=element_blank(),
+          axis.title.x=element_blank(),
+          axis.title.y=element_blank(),
+          axis.text =element_blank(), legend.title=element_blank(), legend.key=element_blank())
+  print(p)
+  ggsave(savename, units = "cm", dpi=800)
+ }
+  
