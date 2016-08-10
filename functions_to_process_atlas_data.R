@@ -48,9 +48,36 @@ limit2chequerboard.britain<-function(indata) {
   if(Ireland=="no"){
   ##select Irish records and remove them
   indata<-indata[!substr(indata$tenkm,1,1)=="I",]
+  return(indata)
   }
  }
   
   
   ###remove all records of species which aren't confirmed breeders in the UK
+  ##go with the list of just confirmed breeders
+  ##now filter list by species list
   
+  ##SUBSET CONFIRMED BREEDING
+  ##SUBSET PROBABLE OR CONFIRMED BREEDING
+  breeding.evidence<-function(indata,cat=c("cat","cat3"),level=c("probable","confirmed","B")){
+    if(level=="probable"){
+      if(cat=="cat"){species_list<-subset(indata, indata$cat)
+      } else {
+        species_list<-subset(indata, indata$cat70>1|indata$cat90>1|indata$cat2010b>1)
+      }
+    }
+    if(level=="confirmed"){
+      if(cat=="cat"){species_list<-subset(indata, indata$cat)
+      } else {
+        species_list<-subset(indata, indata$cat70>2|indata$cat90>2|indata$cat2010b>2)
+      }
+    }
+    if(level=="B"){
+      species_list<-subset(indata, indata$cat)
+    }
+    species_list<-unique(indata$speccode)
+    indata<-subset(indata, indata$speccode %in% species_list)
+    return(indata)
+  }
+ 
+
