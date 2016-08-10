@@ -92,17 +92,18 @@ limit2chequerboard.britain<-function(indata) {
   
   ##function to plot a map of surveyed tetrads/tetrads selected for a certain habitat type
   ##specify appropriate colour vector
+  ##specify point size for the plotted points (this will depend on how many points you have you want to plot)
   ##specify filename for saved plot, needs to end in .tiff or .png or other pciture file type
   
-  plot.map<-function(indata, country=c("britain", "ireland","channel_isles"), colours,savename){
+  plot.map<-function(indata, country=c("britain", "ireland","channel_isles"), colours,point_size, savename){
     library(ggplot2)
     library(rgdal)
-
+    ##might be useful to adapt this so it'll plot all Britain and Ireland at once?
     map<-readOGR(paste0(path.unix.archive,"birdatlas2007-11/data/lookups/needed/gis_outlines"),paste0("atlas_outline_",country,"_only"))
     map<-fortify(map)
     
   p<-ggplot() +
-    geom_point(data=indata, aes(x =easting, y = northing), colour=colours, size=0.1) +
+    geom_point(data=indata, aes(x =easting, y = northing), colour=colours, size=point_size) +
     geom_polygon(data=map, aes(x=long, y=lat, Group=group),colour="black", fill=NA)+
     coord_fixed(ratio=1)+
     theme(text = element_text(family = "serif")) +
