@@ -34,5 +34,23 @@ limit2chequerboard.britain<-function(indata) {
   indata$en<-ifelse(substr(indata$tenkm,1,1) %in% c('H','N','T','S'),indata$en,NA)
   indata<-subset(indata, !en %in% c(0,2,4,6,8,10,12,14,16,18) )
   indata$en<-NULL
-  return(indata)
-}
+  return(indata)}
+  
+  
+  ##remove channel islands and Ireland
+  
+  just.Britain<-function(indata,Ireland){
+    ##select channel islands
+  CI<-grep("WA",indata$tenkm)
+  CI1<-grep("WV",indata$tenkm)
+  ##remove these from the list
+  indata<-indata[-c(CI,CI1),]
+  if(Ireland=="no"){
+  ##select Irish records and remove them
+  indata<-indata[!substr(indata$tenkm,1,1)=="I",]
+  }
+ }
+  
+  
+  ###remove all records of species which aren't confirmed breeders in the UK
+  
