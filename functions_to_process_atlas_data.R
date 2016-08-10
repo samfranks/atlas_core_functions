@@ -39,7 +39,7 @@ limit2chequerboard.britain<-function(indata) {
   
   ##remove channel islands and Ireland
   
-  just.Britain<-function(indata,Ireland){
+  just.Britain<-function(indata,Ireland=c("yes","no")){
     ##select channel islands
   CI<-grep("WA",indata$tenkm)
   CI1<-grep("WV",indata$tenkm)
@@ -48,8 +48,8 @@ limit2chequerboard.britain<-function(indata) {
   if(Ireland=="no"){
   ##select Irish records and remove them
   indata<-indata[!substr(indata$tenkm,1,1)=="I",]
+  } 
   return(indata)
-  }
  }
   
   
