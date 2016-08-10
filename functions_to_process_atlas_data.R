@@ -61,13 +61,13 @@ limit2chequerboard.britain<-function(indata) {
   ##SUBSET PROBABLE OR CONFIRMED BREEDING
   breeding.evidence<-function(indata,cat=c("cat","cat3"),level=c("probable","confirmed","B")){
     if(level=="probable"){
-      if(cat=="cat"){species_list<-subset(indata, indata$cat)
+      if(cat=="cat"){species_list<-subset(indata, indata$cat>1)
       } else {
         species_list<-subset(indata, indata$cat70>1|indata$cat90>1|indata$cat2010b>1)
       }
     }
     if(level=="confirmed"){
-      if(cat=="cat"){species_list<-subset(indata, indata$cat)
+      if(cat=="cat"){species_list<-subset(indata, indata$cat>2)
       } else {
         species_list<-subset(indata, indata$cat70>2|indata$cat90>2|indata$cat2010b>2)
       }
