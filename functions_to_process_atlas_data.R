@@ -53,12 +53,8 @@ limit2chequerboard.britain<-function(indata) {
  }
   
   
-  ###remove all records of species which aren't confirmed breeders in the UK
-  ##go with the list of just confirmed breeders
-  ##now filter list by species list
+  ###remove all species with no confirmed or no probable or confirmed breeding evidence in the UK
   
-  ##SUBSET CONFIRMED BREEDING
-  ##SUBSET PROBABLE OR CONFIRMED BREEDING
   breeding.evidence<-function(indata,cat=c("cat","cat3"),level=c("probable","confirmed","B")){
     if(level=="probable"){
       if(cat=="cat"){species_list<-subset(indata, indata$cat>1)
