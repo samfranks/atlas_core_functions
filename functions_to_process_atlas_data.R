@@ -323,46 +323,46 @@ limit2chequerboard.britain<-function(indata) {
    ############################
 ###function to take a list object of species ranges and display the data in boxplots
   
-  library(taRifx)
-  sp_trends<-stack.list(sp_range_change_all, label=T)
-  head(sp_trends)
-  tail(sp_trends)
+  #library(taRifx)
+  #sp_trends<-stack.list(sp_range_change_all, label=T)
+  #head(sp_trends)
+  #tail(sp_trends)
   
-  sp_trends$from[sp_trends$from==1]<-"upland"
-  sp_trends$from[sp_trends$from==2]<-"wetland"
-  sp_trends$from[sp_trends$from==3]<-"coastal"
-  sp_trends$from[sp_trends$from==4]<-"woodland"
-  sp_trends$from[sp_trends$from==5]<-"farmland"
-  sp_trends$from[sp_trends$from==6]<-"urban"
+  #sp_trends$from[sp_trends$from==1]<-"upland"
+  #sp_trends$from[sp_trends$from==2]<-"wetland"
+  #sp_trends$from[sp_trends$from==3]<-"coastal"
+  #sp_trends$from[sp_trends$from==4]<-"woodland"
+  #sp_trends$from[sp_trends$from==5]<-"farmland"
+  #sp_trends$from[sp_trends$from==6]<-"urban"
   
-  ncol(sp_trends)
-  
-  colnames(sp_trends)[11]<-"Habitat"
+#  ncol(sp_trends)
+ # 
+  #colnames(sp_trends)[11]<-"Habitat"
   
   ##write to csv
-  write.csv(sp_trends, file=paste0(hpc.path,"data_files/csv checking files_habitat/by species/sp_trends_sp_byhab_I.csv"))
+  #write.csv(sp_trends, file=paste0(hpc.path,"data_files/csv checking files_habitat/by species/sp_trends_sp_byhab_I.csv"))
   
   
-  library(ggplot2)
-  library(gridExtra)
-  library(grid)
-  library(lattice)
-   pallette_1<-scale_fill_mannual<-c(name="Habitat", values=c("upland"="#663333", "coastal"="#FFFF00","woodland"="#33FF00","farmland"="#FF9900","wetland"="#0000FF","urban"="#CCCCCCC"))
+  #library(ggplot2)
+  #library(gridExtra)
+  #library(grid)
+  #library(lattice)
+   #pallette_1<-scale_fill_mannual<-c(name="Habitat", values=c("upland"="#663333", "coastal"="#FFFF00","woodland"="#33FF00","farmland"="#FF9900","wetland"="#0000FF","urban"="#CCCCCCC"))
   
   
-  windows()
+  #windows()
   
-  ggplot(sp_trends_I, aes(x=Habitat, y=change90to2010, fill=Habitat)) + geom_boxplot(notch=F, outlier.shape =NA)+
-    scale_fill_manual(name="Habitat", values=c("upland"="#663333", "coastal"="#FFFF00","woodland"="#33FF00","farmland"="#FF9900","wetland"="#0000FF","urban"="#CCCCCC"))+
-    theme(plot.margin=unit(c(0.5, 0.5, 0.5, 0.5), "cm")) +
-    theme_bw() +
+  #ggplot(sp_trends_I, aes(x=Habitat, y=change90to2010, fill=Habitat)) + geom_boxplot(notch=F, outlier.shape =NA)+
+   # scale_fill_manual(name="Habitat", values=c("upland"="#663333", "coastal"="#FFFF00","woodland"="#33FF00","farmland"="#FF9900","wetland"="#0000FF","urban"="#CCCCCC"))+
+    #theme(plot.margin=unit(c(0.5, 0.5, 0.5, 0.5), "cm")) +
+    #theme_bw() +
     #scale_y_continuous(limits=ylim2)+
-    theme(text = element_text(family = "serif"))+
-    ylab("% range change since 1990 (10km squares)")+
-    theme(panel.grid.major = element_blank(),
-          panel.grid.minor = element_blank(),
-          panel.background = element_blank(),
-          axis.text.x=element_text(angle=90, hjust=1),
-          legend.background = element_rect(fill = NA), legend.key = element_blank())
+    #theme(text = element_text(family = "serif"))+
+    #ylab("% range change since 1990 (10km squares)")+
+    #theme(panel.grid.major = element_blank(),
+     #     panel.grid.minor = element_blank(),
+      #    panel.background = element_blank(),
+       #   axis.text.x=element_text(angle=90, hjust=1),
+        #  legend.background = element_rect(fill = NA), legend.key = element_blank())
   
   
