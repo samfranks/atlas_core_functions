@@ -121,5 +121,248 @@ limit2chequerboard.britain<-function(indata) {
           axis.text =element_blank(), legend.title=element_blank(), legend.key=element_blank())
   print(p)
   ggsave(savename, units = "cm", dpi=800)
- }
+  }
+  
+  
+  ###function to calculate species range changes and create boxplots of the results
+ ##the downside is this function si so long its really difficult to check properly
+  ##it returns a result but its hard to check its doing exactly what I want it to do!
+  
+  ##next step- calculate range change for each species in the squares for each habitat
+  ##indata is a dataframe with tetrad/tenkm id in the first column
+  #speccode in the second column
+  ##the rest of the columns are years of the atlas in order earlier first
+  ##for abundance data the column after the abundance values for each year is the difference column
+  
+   range_change<-function(indata,type=c("presence","abundance"),years=c(1,2,3),restrict_range=c(TRUE,FALSE),restricted_range_limit=NULL){
+    
+    ##get rid of rows where zero for each year
+    
+    if(years==1){
+      hab<-indata[indata[,3]>0]
+      
+      ##get unique list of species
+      sp<-unique(hab[,2])
+      
+       #create a matrix for store the information in
+      sp_range<-matrix(nrow=length(sp), ncol=3)
+      ##first column contains the list of sp
+      sp_range[,1]<-sp
+      ##assign column names
+      colnames(sp_range)<-c("speccode","PA")
+      
+      ##sum number of occupied tenkm squares for each species for each year
+      for (i in 1:length(sp)){
+        sp_hab<-subset(hab, speccode==sp[i])
+        sp_range[i,2]<-sum(sp_hab[,3])
+      }
+      ##change to data frame
+      sp_range<-as.data.frame(sp_range)
+      
+      ##option to exclude rare species
+      if (restrict_range==TRUE){
+        sp_range1<-sp_range[sp_range$PA>restricted_range_limit,]
+      }else{
+        sp_range1<-sp_range
+      } 
+        }
+      
+      return(sp_range1)
+    
+    if(years==2){
+      hab<-indata[indata[,3]>0|indata[,4]>0]
+      
+      ##get unique list of species
+      sp<-unique(hab[,2])
+      
+      if (type=="presence"){
+       
+         #create a matrix for store the information in
+        sp_range<-matrix(nrow=length(sp), ncol=3)
+        ##first column contains the list of sp
+        sp_range[,1]<-sp
+      ##assign column names
+      colnames(sp_range)<-c("speccode","PA90","PA2010")
+      
+      ##sum number of occupied tenkm squares for each species for each year
+      for (i in 1:length(sp)){
+        sp_hab<-subset(hab, speccode==sp[i])
+        sp_range[i,2]<-sum(sp_hab[,3])
+        sp_range[i,3]<-sum(sp_hab[,4])
+      }
+      ##change to data frame
+      sp_range<-as.data.frame(sp_range)
+      
+      ##option to exclude rare species
+      if (restrict_range==TRUE){
+        sp_range1<-sp_range[sp_range$PA90>restricted_range_limit|sp_range$PA2010>restricted_range_limit,]
+      }else{
+        sp_range1<-sp_range
+      }
+      
+      ##difference
+      sp_range1$diff90to2010<-sp_range1$PA2010-sp_range1$PA90
+   
+      
+      ##percentage change
+      sp_range1$change90to2010<-(sp_range1$PA2010-sp_range1$PA90)/sp_range1$PA90
+      
+      sp_range1$logR70to2010<-rep(NA, length(sp_range1[,1]))
+      sp_range1$logR90to2010<-rep(NA, length(sp_range1[,1]))
+      
+      ##calculate the log ratio
+      for (p in 1:length(sp_range1[,1])){
+        if (sp_range1$PA90[p]>0){
+          sp_range1$logR90to2010[p]<-log(sp_range1$PA2010[p]/sp_range1$PA90[p])
+        }
+      }}
+      if(type=="abundance"){
+        ##and look at aggregation
+        library(ineq)
+    
+          #create a matrix for store the information in
+          sp_range<-matrix(nrow=length(sp), ncol=9)
+          
+          ##assign column names
+          colnames(sp_range)<-c("speccode","mean_index_90","mean_index_10","total_abund_1990","total_abund_2010","mean_diff","sum_diff", "Gini_1990", "Gini_2010")
+          
+          for (i in 1:length(sp)){
+            sp_hab<-subset(hab, speccode==sp[i])
+            ##look at mean abundance diff
+            sp_range[i,2]<-mean(sp_hab[,3])
+            sp_range[i,3]<-mean(sp_hab[,4])
+            ##and total abundance diff
+            sp_range[i,4]<-sum(sp_hab[,3])
+            sp_range[i,5]<-sum(sp_hab[,4])
+            ##look at mean difference across sqs and total difference
+            sp_range[i,6]<-mean(sp_hab[,5])
+            ##look at total difference
+            sp_range[i,7]<-sum(sp_hab[,5])
+            ##it'd also be interesting to look at distribution here somehow
+            ##get Gini coefficient for every species
+            sp_range[i,8]<-ineq(sp_hab[,3], type="Gini")
+            sp_range[i,9]<-ineq(sp_hab[,4], type="Gini")
+          }
+          ##change to data frame
+          sp_range1<-as.data.frame(sp_range)
+          
+          ##first column contains the list of sp
+          ##for some reason if I add this first all the numeric columns become factors
+          ##don't know why.....
+          sp_range1[,1]<-sp
+          
+          
+          ##percentage change
+          sp_range1$change90to2010<-(sp_range1$mean_index_10-sp_range1$mean_index_90)/sp_range1$mean_index_90
+    
+        }}
+      
+      return(sp_range1)
+      
+    if(years==3){
+    hab<-indata[indata[,3]>0|indata[,4]>0|indata[,5]>0,]
+  
+    ##get unique list of species
+    sp<-unique(hab[,2])
+    
+    #create a matrix for store the information in
+    sp_range<-matrix(nrow=length(sp), ncol=4)
+    ##first column contains the list of sp
+    sp_range[,1]<-sp
+    ##assign column names
+    colnames(sp_range)<-c("speccode","PA70","PA90","PA2010")
+    
+    ##sum number of occupied tenkm squares for each species for each year
+    for (i in 1:length(sp)){
+      sp_hab<-subset(hab, speccode==sp[i])
+      sp_range[i,2]<-sum(sp_hab[,3])
+      sp_range[i,3]<-sum(sp_hab[,4])
+      sp_range[i,4]<-sum(sp_hab[,5])
+    }
+    ##change to data frame
+    sp_range<-as.data.frame(sp_range)
+    
+    ##option to exclude rare species
+    if (restrict_range==TRUE){
+    sp_range1<-sp_range[sp_range$PA70>restricted_range_limit|sp_range$PA90>restricted_range_limit|sp_range$PA2010>restricted_range_limit,]
+    }else{
+      sp_range1<-sp_range
+    }
+      
+    ##this is difference
+    sp_range1$diff70to2010<-(sp_range1$PA2010-sp_range1$PA70)
+    sp_range1$diff90to2010<-(sp_range1$PA2010-sp_range1$PA90)
+  
+    
+    ##percentage change
+    sp_range1$change70to2010<-(sp_range1$PA2010-sp_range1$PA70)/sp_range1$PA70
+    sp_range1$change90to2010<-(sp_range1$PA2010-sp_range1$PA90)/sp_range1$PA90
+    
+    sp_range1$logR70to2010<-rep(NA, length(sp_range1[,1]))
+    sp_range1$logR90to2010<-rep(NA, length(sp_range1[,1]))
+    
+    ##calculate the log ratio
+    for (p in 1:length(sp_range1[,1])){
+      if (sp_range1$PA70[p]>0){
+        
+        sp_range1$logR70to2010[p]<-log(sp_range1$PA2010[p]/sp_range1$PA70[p])
+        
+      }
+      if (sp_range1$PA90[p]>0){
+        sp_range1$logR90to2010[p]<-log(sp_range1$PA2010[p]/sp_range1$PA90[p])
+      }
+    }}
+    
+  return(sp_range1)
+    
+    }
+   
+  
+   
+   ###############not finished yet
+   ############################
+###function to take a list object of species ranges and display the data in boxplots
+  
+  library(taRifx)
+  sp_trends<-stack.list(sp_range_change_all, label=T)
+  head(sp_trends)
+  tail(sp_trends)
+  
+  sp_trends$from[sp_trends$from==1]<-"upland"
+  sp_trends$from[sp_trends$from==2]<-"wetland"
+  sp_trends$from[sp_trends$from==3]<-"coastal"
+  sp_trends$from[sp_trends$from==4]<-"woodland"
+  sp_trends$from[sp_trends$from==5]<-"farmland"
+  sp_trends$from[sp_trends$from==6]<-"urban"
+  
+  ncol(sp_trends)
+  
+  colnames(sp_trends)[11]<-"Habitat"
+  
+  ##write to csv
+  write.csv(sp_trends, file=paste0(hpc.path,"data_files/csv checking files_habitat/by species/sp_trends_sp_byhab_I.csv"))
+  
+  
+  library(ggplot2)
+  library(gridExtra)
+  library(grid)
+  library(lattice)
+   pallette_1<-scale_fill_mannual<-c(name="Habitat", values=c("upland"="#663333", "coastal"="#FFFF00","woodland"="#33FF00","farmland"="#FF9900","wetland"="#0000FF","urban"="#CCCCCCC"))
+  
+  
+  windows()
+  
+  ggplot(sp_trends_I, aes(x=Habitat, y=change90to2010, fill=Habitat)) + geom_boxplot(notch=F, outlier.shape =NA)+
+    scale_fill_manual(name="Habitat", values=c("upland"="#663333", "coastal"="#FFFF00","woodland"="#33FF00","farmland"="#FF9900","wetland"="#0000FF","urban"="#CCCCCC"))+
+    theme(plot.margin=unit(c(0.5, 0.5, 0.5, 0.5), "cm")) +
+    theme_bw() +
+    #scale_y_continuous(limits=ylim2)+
+    theme(text = element_text(family = "serif"))+
+    ylab("% range change since 1990 (10km squares)")+
+    theme(panel.grid.major = element_blank(),
+          panel.grid.minor = element_blank(),
+          panel.background = element_blank(),
+          axis.text.x=element_text(angle=90, hjust=1),
+          legend.background = element_rect(fill = NA), legend.key = element_blank())
+  
   
