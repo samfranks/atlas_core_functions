@@ -341,7 +341,7 @@ limit2chequerboard.britain<-function(indata) {
    
   windows()
   
-  ggplot(sp_trends, aes(x=Habitat, y=plotvar, fill=Habitat)) + geom_boxplot(notch=F, outlier.shape =NA)+
+  ggplot(sp_trends, aes(x=Habitat, y=sp_trends[,x], fill=Habitat)) + geom_boxplot(notch=F, outlier.shape =NA)+
    scale_fill_manual(name="Habitat", values=colours)+
     theme(plot.margin=unit(c(0.5, 0.5, 0.5, 0.5), "cm")) +
     theme_bw() +
