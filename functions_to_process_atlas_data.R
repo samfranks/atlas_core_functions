@@ -134,12 +134,10 @@ limit2chequerboard.britain<-function(indata) {
   ##the rest of the columns are years of the atlas in order earlier first
   ##for abundance data the column after the abundance values for each year is the difference column
   
-   range_change<-function(indata,type=c("presence","abundance"),years=c(1,2,3),restrict_range=c(TRUE,FALSE),restricted_range_limit=NULL){
-    
-    ##get rid of rows where zero for each year
+   range_change<-function(indata,type=c("presence","abundance"),years=c(1,2,3), restrict_range=FALSE,restricted_range_limit=NULL){
     
     if(years==1){
-      hab<-indata[indata[,3]>0]
+      hab<-indata[indata[,3]>0,]
       
       ##get unique list of species
       sp<-unique(hab[,2])
@@ -161,16 +159,13 @@ limit2chequerboard.britain<-function(indata) {
       
       ##option to exclude rare species
       if (restrict_range==TRUE){
-        sp_range1<-sp_range[sp_range$PA>restricted_range_limit,]
-      }else{
-        sp_range1<-sp_range
-      } 
-        }
-      
-      return(sp_range1)
+       sp_range<-sp_range[sp_range$PA>restricted_range_limit,]}
+ 
+      return(sp_range)
+    }
     
     if(years==2){
-      hab<-indata[indata[,3]>0|indata[,4]>0]
+      hab<-indata[indata[,3]>0|indata[,4]>0,]
       
       ##get unique list of species
       sp<-unique(hab[,2])
@@ -194,26 +189,23 @@ limit2chequerboard.britain<-function(indata) {
       sp_range<-as.data.frame(sp_range)
       
       ##option to exclude rare species
-      if (restrict_range==TRUE){
-        sp_range1<-sp_range[sp_range$PA90>restricted_range_limit|sp_range$PA2010>restricted_range_limit,]
-      }else{
-        sp_range1<-sp_range
-      }
-      
+     if (restrict_range==TRUE){
+      sp_range<-sp_range[sp_range$PA90>restricted_range_limit|sp_range$PA2010>restricted_range_limit,]
+     }   
       ##difference
-      sp_range1$diff90to2010<-sp_range1$PA2010-sp_range1$PA90
+      sp_range$diff90to2010<-sp_range$PA2010-sp_range$PA90
    
       
       ##percentage change
-      sp_range1$change90to2010<-(sp_range1$PA2010-sp_range1$PA90)/sp_range1$PA90
+      sp_range$change90to2010<-(sp_range$PA2010-sp_range$PA90)/sp_range$PA90
       
-      sp_range1$logR70to2010<-rep(NA, length(sp_range1[,1]))
-      sp_range1$logR90to2010<-rep(NA, length(sp_range1[,1]))
+      sp_range$logR70to2010<-rep(NA, length(sp_range[,1]))
+      sp_range$logR90to2010<-rep(NA, length(sp_range[,1]))
       
       ##calculate the log ratio
-      for (p in 1:length(sp_range1[,1])){
-        if (sp_range1$PA90[p]>0){
-          sp_range1$logR90to2010[p]<-log(sp_range1$PA2010[p]/sp_range1$PA90[p])
+      for (p in 1:length(sp_range[,1])){
+        if (sp_range$PA90[p]>0){
+          sp_range$logR90to2010[p]<-log(sp_range$PA2010[p]/sp_range$PA90[p])
         }
       }}
       if(type=="abundance"){
@@ -244,21 +236,22 @@ limit2chequerboard.britain<-function(indata) {
             sp_range[i,9]<-ineq(sp_hab[,4], type="Gini")
           }
           ##change to data frame
-          sp_range1<-as.data.frame(sp_range)
+          sp_range<-as.data.frame(sp_range)
           
           ##first column contains the list of sp
           ##for some reason if I add this first all the numeric columns become factors
           ##don't know why.....
-          sp_range1[,1]<-sp
+          sp_range[,1]<-sp
           
           
           ##percentage change
-          sp_range1$change90to2010<-(sp_range1$mean_index_10-sp_range1$mean_index_90)/sp_range1$mean_index_90
+          sp_range$change90to2010<-(sp_range$mean_index_10-sp_range$mean_index_90)/sp_range$mean_index_90
     
-        }}
       
-      return(sp_range1)
-      
+      }
+      return(sp_range)
+    }
+          
     if(years==3){
     hab<-indata[indata[,3]>0|indata[,4]>0|indata[,5]>0,]
   
@@ -284,38 +277,36 @@ limit2chequerboard.britain<-function(indata) {
     
     ##option to exclude rare species
     if (restrict_range==TRUE){
-    sp_range1<-sp_range[sp_range$PA70>restricted_range_limit|sp_range$PA90>restricted_range_limit|sp_range$PA2010>restricted_range_limit,]
-    }else{
-      sp_range1<-sp_range
+    sp_range<-sp_range[sp_range$PA70>restricted_range_limit|sp_range$PA90>restricted_range_limit|sp_range$PA2010>restricted_range_limit,]
     }
-      
+    
     ##this is difference
-    sp_range1$diff70to2010<-(sp_range1$PA2010-sp_range1$PA70)
-    sp_range1$diff90to2010<-(sp_range1$PA2010-sp_range1$PA90)
+    sp_range$diff70to2010<-(sp_range$PA2010-sp_range$PA70)
+    sp_range$diff90to2010<-(sp_range$PA2010-sp_range$PA90)
   
     
     ##percentage change
-    sp_range1$change70to2010<-(sp_range1$PA2010-sp_range1$PA70)/sp_range1$PA70
-    sp_range1$change90to2010<-(sp_range1$PA2010-sp_range1$PA90)/sp_range1$PA90
+    sp_range$change70to2010<-(sp_range$PA2010-sp_range$PA70)/sp_range$PA70
+    sp_range$change90to2010<-(sp_range$PA2010-sp_range$PA90)/sp_range$PA90
     
-    sp_range1$logR70to2010<-rep(NA, length(sp_range1[,1]))
-    sp_range1$logR90to2010<-rep(NA, length(sp_range1[,1]))
+    sp_range$logR70to2010<-rep(NA, length(sp_range[,1]))
+    sp_range$logR90to2010<-rep(NA, length(sp_range[,1]))
     
     ##calculate the log ratio
-    for (p in 1:length(sp_range1[,1])){
-      if (sp_range1$PA70[p]>0){
+    for (p in 1:length(sp_range[,1])){
+      if (sp_range$PA70[p]>0){
         
-        sp_range1$logR70to2010[p]<-log(sp_range1$PA2010[p]/sp_range1$PA70[p])
+        sp_range$logR70to2010[p]<-log(sp_range$PA2010[p]/sp_range$PA70[p])
         
       }
-      if (sp_range1$PA90[p]>0){
-        sp_range1$logR90to2010[p]<-log(sp_range1$PA2010[p]/sp_range1$PA90[p])
+      if (sp_range$PA90[p]>0){
+        sp_range$logR90to2010[p]<-log(sp_range$PA2010[p]/sp_range$PA90[p])
       }
-    }}
-    
-  return(sp_range1)
-    
     }
+    
+  return(sp_range)
+    
+    }}
    
   
    
