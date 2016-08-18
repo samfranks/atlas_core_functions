@@ -332,15 +332,9 @@ load.1990.ttv<-function() {
   cat('year = year square surveyed\n')
   cat('tetrad_num = no. tetrads visited\n')
   cat('tetrad_1v = no. tetrads visited only once\n')
-  tetrads<-c("A","B","C","D","E","F","G","H","I", "J", "K", "L","M","N","P","Q","R","S","T","U","V","W","X","Y","Z")
-  for (i in 11:35){
-    cat(paste0(tetrads[i], '_visits = number of visits to tetrad\n' ))
-  }
+  cat('tetrad_visits = number of visits to each tetrad\n')
   cat('cbc_code = 2-letter species code\n')
-  v<-seq(38,112, by=3)
-  for (j in v){
-    cat(paste0(tetrads[j], '_count = number of visits to tetrad\n' ))
-  }
+  cat('tetrad_count = number of visits to each tetrad\n')
   cat('total_tetrad_p = num of tetrads a species was recorded in\n')
   cat('total_count = total count accross all tetrads visited\n')
   cat('cat = actual breeding status, seen (S) or breeding (B)\n')
