@@ -322,3 +322,35 @@ load.maxcat1990<-function() {
   return(data)
 
 }
+
+############################################################################
+####load all tetrad data for 89-91 atlas################################
+#########################################################################
+
+load.1990.ttv<-function() {
+  cat('tenkm = 10-km square surveyed\n')
+  cat('year = year square surveyed\n')
+  cat('tetrad_num = no. tetrads visited\n')
+  cat('tetrad_1v = no. tetrads visited only once\n')
+  tetrads<-c("A","B","C","D","E","F","G","H","I", "J", "K", "L","M","N","P","Q","R","S","T","U","V","W","X","Y","Z")
+  for (i in 11:35){
+    cat(paste0(tetrads[i], '_visits = number of visits to tetrad\n' ))
+  }
+  cat('cbc_code = 2-letter species code\n')
+  v<-seq(38,112, by=3)
+  for (j in v){
+    cat(paste0(tetrads[j], '_count = number of visits to tetrad\n' ))
+  }
+  cat('total_tetrad_p = num of tetrads a species was recorded in\n')
+  cat('total_count = total count accross all tetrads visited\n')
+  cat('cat = actual breeding status, seen (S) or breeding (B)\n')
+  data<-read.fwf(paste0(path.unix.archive,'/birdatlas1988-91breed/data2km/gibbtetradsbysquare.txt'),
+                 header=F,
+                 widths=c(4,2,2,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,2,2,1),
+                 col.names = c("tenkm","year","tetrad_num","tetrad_1v", "A_visits","B_visits","C_visits","D_visits","E_visits","F_visits","G_visits",
+                               "H_visits" , "I_visits","J_visits","K_visits","L_visits","M_visits","N_visits","P_visits","Q_visits","R_visits","S_visits","T_visits",
+                               "U_visits" ,"V_visits","W_visits","X_visits","Y_visits","Z_visits", "cbc_code", "A","B","C","D","E","F","G","H","I","J","K","L","M",
+                               "N", "P","Q","R","S","T","U","V","W","X","Y", "z","total_tetrad_p","total_count","cat"),
+                 colClasses=c('character',rep('numeric',28),'character',rep('numeric', 27), 'character'))
+  return(data)
+}
