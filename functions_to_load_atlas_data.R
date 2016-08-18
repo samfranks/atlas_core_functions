@@ -340,11 +340,11 @@ load.1990.ttv<-function() {
   cat('cat = actual breeding status, seen (S) or breeding (B)\n')
   data<-read.fwf(paste0(path.unix.archive,'/birdatlas1988-91breed/data2km/gibbtetradsbysquare.txt'),
                  header=F,
-                 widths=c(4,2,2,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,2,2,1),
+                 widths=c(4,2,2,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,2,4,1),
                  col.names = c("tenkm","year","tetrad_num","tetrad_1v", "A_visits","B_visits","C_visits","D_visits","E_visits","F_visits","G_visits",
                                "H_visits" , "I_visits","J_visits","K_visits","L_visits","M_visits","N_visits","P_visits","Q_visits","R_visits","S_visits","T_visits",
                                "U_visits" ,"V_visits","W_visits","X_visits","Y_visits","Z_visits", "cbc_code", "A","B","C","D","E","F","G","H","I","J","K","L","M",
                                "N", "P","Q","R","S","T","U","V","W","X","Y", "z","total_tetrad_p","total_count","cat"),
-                 colClasses=c('character',rep('numeric',28),'character',rep('numeric', 27), 'character'))
+                 colClasses=c('character',rep('numeric',28),'character',rep('numeric', 27), 'character'),na.strings = ".")
   return(data)
 }
