@@ -151,7 +151,7 @@ limit2chequerboard.britain<-function(indata) {
       
       ##sum number of occupied tenkm squares for each species for each year
       for (i in 1:length(sp)){
-        sp_hab<-subset(hab, speccode==sp[i])
+        sp_hab<-subset(hab, hab[,2]==sp[i])
         sp_range[i,2]<-sum(sp_hab[,3])
       }
       ##change to data frame
@@ -165,13 +165,12 @@ limit2chequerboard.britain<-function(indata) {
     }
     
     if(years==2){
-      hab<-indata[indata[,3]>0|indata[,4]>0,]
-      
-      ##get unique list of species
-      sp<-unique(hab[,2])
-      
+    
       if (type=="presence"){
-       
+        
+        hab<-indata[indata[,3]>0|indata[,4]>0,]
+        ##get unique list of species
+        sp<-unique(hab[,2])
          #create a matrix for store the information in
         sp_range<-matrix(nrow=length(sp), ncol=3)
         ##first column contains the list of sp
@@ -181,7 +180,7 @@ limit2chequerboard.britain<-function(indata) {
       
       ##sum number of occupied tenkm squares for each species for each year
       for (i in 1:length(sp)){
-        sp_hab<-subset(hab, speccode==sp[i])
+        sp_hab<-subset(hab, hab[,2]==sp[i])
         sp_range[i,2]<-sum(sp_hab[,3])
         sp_range[i,3]<-sum(sp_hab[,4])
       }
@@ -209,6 +208,11 @@ limit2chequerboard.britain<-function(indata) {
         }
       }}
       if(type=="abundance"){
+        
+        hab<-indata[indata[,3]>0|indata[,4]>0,]
+        
+        ##get unique list of species
+        sp<-unique(hab[,2])
         ##and look at aggregation
         library(ineq)
     
@@ -219,7 +223,7 @@ limit2chequerboard.britain<-function(indata) {
           colnames(sp_range)<-c("speccode","mean_index_90","mean_index_10","total_abund_1990","total_abund_2010","mean_diff","sum_diff", "Gini_1990", "Gini_2010")
           
           for (i in 1:length(sp)){
-            sp_hab<-subset(hab, speccode==sp[i])
+            sp_hab<-subset(hab, hab[,2]==sp[i])
             ##look at mean abundance diff
             sp_range[i,2]<-mean(sp_hab[,3])
             sp_range[i,3]<-mean(sp_hab[,4])
@@ -267,7 +271,7 @@ limit2chequerboard.britain<-function(indata) {
     
     ##sum number of occupied tenkm squares for each species for each year
     for (i in 1:length(sp)){
-      sp_hab<-subset(hab, speccode==sp[i])
+      sp_hab<-subset(hab, hab[,2]==sp[i])
       sp_range[i,2]<-sum(sp_hab[,3])
       sp_range[i,3]<-sum(sp_hab[,4])
       sp_range[i,4]<-sum(sp_hab[,5])
