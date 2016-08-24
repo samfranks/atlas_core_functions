@@ -78,6 +78,7 @@ limit2chequerboard.britain<-function(indata) {
  
 
 ###function to remove exotic species
+  ##currently needs specode, but should work with cbc code too
   remove.exotics<-function(indata,season=c("b","w")){
   non_native<-read.csv(file=paste0(path.unix.archive,'birdatlas2007-11/data/lookups/non_native_categories.csv'),header=T)
   ##subset just to get exotics
@@ -198,7 +199,7 @@ limit2chequerboard.britain<-function(indata) {
       ##percentage change
       sp_range$change90to2010<-(sp_range$PA2010-sp_range$PA90)/sp_range$PA90
       
-      sp_range$logR70to2010<-rep(NA, length(sp_range[,1]))
+      ##log ratio
       sp_range$logR90to2010<-rep(NA, length(sp_range[,1]))
       
       ##calculate the log ratio
