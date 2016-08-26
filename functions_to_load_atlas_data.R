@@ -348,3 +348,95 @@ load.1990.ttv<-function() {
                  colClasses=c('character',rep('numeric',28),'character',rep('numeric', 27), 'character'),na.strings = ".")
   return(data)
 }
+
+##########################################################################################
+############read in atlas data and process to appropriate form for most  analyses####
+#############so separate Britain and Ireland, remove channel islands, remove exotic and hybrid species
+####remove species that are not confirmed UK breeders
+####################################################################################
+
+##try a way of repeating this analysis without having to copy it all out again
+data_to_use<-function(country=c("B","I"), type=c("abund","pres")){
+  if(country=="B" & type=="pres"){
+    country<-"B"
+    data<-load.allmaxcats()
+    head(data)
+    ##but only want breeding atlas
+    ##so get rid of wintering columns
+    data<-data[,-c(4,7)]
+    ##get rid of hybrids
+    data<-exclude.hybrids(data)
+    data<-just.Britain(data,Ireland="no")
+    ##na's to zeros
+    data[is.na(data)]<-0
+    ##SUBSET CONFIRMED BREEDING
+    sp_confirm<-subset(data, data$cat70>2|data$cat90>2|data$cat2010b>2)
+    head(sp_confirm)
+    ##unique list
+    sp_confirm<-unique(sp_confirm$speccode)
+    data<-subset(data, data$speccode %in% sp_confirm)
+    ##select the right part of the dataframe
+    data_cat<-data[,3:5]
+    ##replace with 1's
+    data_cat[data_cat>0.2]<-1
+    ##now recombine
+    data<-cbind(data[,1:2],data_cat)
+    ##change column titles to PA for each atlas
+    colnames(data)<-c("tenkm","speccode","PA70", "PA90", "PA2010")
+    ##remove exotics
+    data<-remove.exotics(data, season="b")
+    ##load species names and codes
+    specnames<-load.specnames()
+    head(specnames)
+    data<-merge(data,specnames[,c(1,3)])
+  }
+  if(country=="I" & type=="pres"){
+    country<-"I"
+    data<-load.allmaxcats()
+    head(data)
+    ##but only want breeding atlas
+    ##so get rid of wintering columns
+    data<-data[,-c(4,7)]
+    ##get rid of hybrids
+    data<-exclude.hybrids(data)
+    data<-indata[!substr(data$tenkm,1,1)=="I",]
+    ##na's to zeros
+    data[is.na(data)]<-0
+    ##SUBSET CONFIRMED BREEDING
+    sp_confirm<-subset(data, data$cat70>2|data$cat90>2|data$cat2010b>2)
+    head(sp_confirm)
+    ##unique list
+    sp_confirm<-unique(sp_confirm$speccode)
+    data<-subset(data, data$speccode %in% sp_confirm)
+    ##select the right part of the dataframe
+    data_cat<-data[,3:5]
+    ##replace with 1's
+    data_cat[data_cat>0.2]<-1
+    ##now recombine
+    data<-cbind(data[,1:2],data_cat)
+    ##change column titles to PA for each atlas
+    colnames(data)<-c("tenkm","speccode","PA70", "PA90", "PA2010")
+    ##remove exotics
+    data<-remove.exotics(data, season = "b")
+    ##load species names and codes
+    specnames<-load.specnames()
+    head(specnames)
+    data<-merge(data,specnames[,c(1,3)])
+  }
+  if(country=="B" & type=="abund"){   
+    ##load abundance data
+    data<-read.csv(file=paste0(hpc.path,"data_files/results_abchange_by_spp_10km.csv"),header=T)
+    data<-just.Britain(data,Ireland="no")
+    ##exclude seabirds
+    data<-exclude.seabirds.on.cbc_code(data)
+  }
+  if(country=="I" & type=="abund") {
+    ##load abundance data
+    data<-read.csv(file=paste0(hpc.path,"data_files/results_abchange_by_spp_10km.csv"),header=T)
+    ##just ireland 
+    data<-subset(data,substr(data$tenkm,1,1)=="I")
+    ##exclude seabirds
+    data<-exclude.seabirds.on.cbc_code(data)
+  }
+  return(data)
+}

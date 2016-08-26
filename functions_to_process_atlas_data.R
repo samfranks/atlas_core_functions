@@ -52,6 +52,7 @@ limit2chequerboard.britain<-function(indata) {
   return(indata)
  }
   
+
   
   ###remove all species with no confirmed or no probable or confirmed breeding evidence in the UK
   
@@ -226,7 +227,7 @@ limit2chequerboard.britain<-function(indata) {
           sp_range<-matrix(nrow=length(sp), ncol=9)
           
           ##assign column names
-          colnames(sp_range)<-c("speccode","mean_index_90","mean_index_10","total_abund_1990","total_abund_2010","mean_diff","sum_diff", "Gini_1990", "Gini_2010")
+          colnames(sp_range)<-c("cbc_code","mean_index_90","mean_index_10","total_abund_1990","total_abund_2010","mean_diff","sum_diff", "Gini_1990", "Gini_2010")
           
           for (i in 1:length(sp)){
             sp_hab<-subset(hab, hab[,2]==sp[i])
@@ -395,3 +396,5 @@ limit2chequerboard.britain<-function(indata) {
     grid.draw(combined)
     
   }
+  
+  
