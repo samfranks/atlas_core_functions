@@ -352,10 +352,10 @@ load.1990.ttv<-function() {
 ##########################################################################################
 ############read in atlas data and process to appropriate form for most  analyses####
 #############so separate Britain and Ireland, remove channel islands, remove exotic and hybrid species
-####remove species that are not confirmed UK breeders
+####remove species that are not confirmed UK breeders for presence data- I think this isn't a problem for abundance data..
+####does Britain abundance data also need to be limited to a chequerboard?
 ####################################################################################
 
-##try a way of repeating this analysis without having to copy it all out again
 data_to_use<-function(country=c("B","I"), type=c("abund","pres")){
   if(country=="B" & type=="pres"){
     country<-"B"
@@ -429,14 +429,28 @@ data_to_use<-function(country=c("B","I"), type=c("abund","pres")){
     data<-just.Britain(data,Ireland="no")
     ##exclude seabirds
     data<-exclude.seabirds.on.cbc_code(data)
+    ##load species names and codes
+    specnames<-load.specnames()
+    head(specnames)
+    data<-merge(data,specnames[,c(1:3)])
+    ##remove exotics
+    data<-remove.exotics(data, season="b")
   }
   if(country=="I" & type=="abund") {
     ##load abundance data
     data<-read.csv(file=paste0(hpc.path,"data_files/results_abchange_by_spp_10km.csv"),header=T)
     ##just ireland 
     data<-subset(data,substr(data$tenkm,1,1)=="I")
+    ##chequerboard
+    data<-limit2chequerboard.ireland(data)
     ##exclude seabirds
     data<-exclude.seabirds.on.cbc_code(data)
+    ##load species names and codes
+    specnames<-load.specnames()
+    head(specnames)
+    data<-merge(data,specnames[,c(1:3)])
+    ##remove exotics
+    data<-remove.exotics(data, season="b")
   }
   return(data)
 }
