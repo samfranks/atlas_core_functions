@@ -131,6 +131,7 @@ limit2chequerboard.britain<-function(indata) {
   }
   
   
+
   ###function to calculate species range changes and create boxplots of the results
  ##the downside is this function si so long its really difficult to check properly
   ##it returns a result but its hard to check its doing exactly what I want it to do!
@@ -320,30 +321,38 @@ limit2chequerboard.britain<-function(indata) {
     }}
    
 
-###function to take a list object of species ranges and display the data in boxplots
+   ##function to stack list data and add names from a specified vector
+   
+   stack<-function(indata, habitats, write.csv=FALSE, savename=NULL){
+     library(taRifx)
+     sp_trends<-stack.list(indata, label=T)
+     
+     for (i in 1:length(habitats)){
+       sp_trends$from[sp_trends$from==i]<-habitats[i]
+     }
+     
+     n<-ncol(sp_trends)
+     
+     colnames(sp_trends)[n]<-"Habitat"
+     
+     if(write.csv==TRUE){
+       write.csv(sp_trends, file=savename)
+     }
+     
+     return(sp_trends)
+   }
+   
+
+   ###function to take species ranges and display the data in boxplots
   #need in data
    ##habitats is a vector of the different habitat types/ or other variable that was used to group the species 
-   #specify if want to write to csv
-   ##if specify writecsv then need to specify a filename to save in
    ##colours- specify colours for each habitat/group in the order in which they appear in the habitats vector
    #plotvar = name of the variable you want to plot
+   #x column with data from var want to plot
+   ##could also change this to plot multiple boxplots at once?
    
-  boxplot_range_change<-function(indata, habitats,plotvar,writecsv=FALSE, savename=NULL, colours){
+  boxplot_range_change<-function(indata, habitats,plotvar,x, savename=NULL, colours, y1, y2){
    
-   library(taRifx)
-  sp_trends<-stack.list(indata, label=T)
-  
-  for (i in 1:length(habitats)){
-    sp_trends$from[sp_trends$from==i]<-habitats[i]
-  }
-  
- n<-ncol(sp_trends)
-  
-  colnames(sp_trends)[n]<-"Habitat"
-  
-  if(writecsv==TRUE){
-  write.csv(sp_trends, file=savename)
-  }
   
   library(ggplot2)
   library(gridExtra)
@@ -355,6 +364,7 @@ limit2chequerboard.britain<-function(indata) {
   ggplot(sp_trends, aes(x=Habitat, y=sp_trends[,x], fill=Habitat)) + geom_boxplot(notch=F, outlier.shape =NA)+
    scale_fill_manual(name="Habitat", values=colours)+
     theme(plot.margin=unit(c(0.5, 0.5, 0.5, 0.5), "cm")) +
+    scale_y_continuous(limits=c(y1,y2))
     theme_bw() +
     theme(text = element_text(family = "serif"))+
     ylab(plotvar)+
