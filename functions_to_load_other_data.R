@@ -35,13 +35,22 @@ cat('Functions for loading related data...\n')
 
 
 #####################################################################################################################################################
-# load dataset containing the land area per 10-km square for Britain and Ireland ---------------------------------------------------------------
+# load dataset containing the land area per 10-km square ---------------------------------------------------------------
+# currently two versions for BI low tide or GB high tide (high tide line not available for Ireland)
 #####################################################################################################################################################
-load.areas<-function() {
-  data<-read.table(paste(path.unix.archive,'birdatlas2007-11/data/lookups/sas-staticdata/BI010_area_above_low_tide_line.csv',sep=''),
-                   sep=',',
-                   header=T,
-                   colClasses=c('character','numeric'))
+load.areas<-function(type='BIlow') {
+  if(type=='BIlow') {
+    data<-read.table(paste(path.unix.archive,'birdatlas2007-11/data/lookups/sas-staticdata/BI010_area_above_low_tide_line.csv',sep=''),
+                     sep=',',
+                     header=T,
+                     colClasses=c('character','numeric'))
+  }
+  if(type=='GBhigh') {
+    data<-read.table(paste(path.unix.archive,'birdatlas2007-11/data/lookups/sas-staticdata/GB010_area_above_mean_high_water.csv',sep=''),
+                     sep=',',
+                     header=T,
+                     colClasses=c('character','numeric'))
+  }
   return(data)
 }
 
