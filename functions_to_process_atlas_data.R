@@ -64,7 +64,7 @@ limit2chequerboard.britain<-function(indata) {
       }
     }
     if(level=="confirmed"){
-      if(cat=="cat"){species_list<-subset(indata, indata$cat>2)
+      if(cat=="cat3"){species_list<-subset(indata, indata$cat>2)
       } else {
         species_list<-subset(indata, indata$cat70>2|indata$cat90>2|indata$cat2010b>2)
       }
