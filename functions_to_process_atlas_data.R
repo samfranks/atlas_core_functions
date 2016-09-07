@@ -55,13 +55,12 @@ limit2chequerboard.britain<-function(indata) {
 
   
   ###remove all species with no confirmed or no probable or confirmed breeding evidence in the UK
-  
   breeding.evidence<-function(indata,cat=c("cat","cat3"),level=c("probable","confirmed","B")){
     if(level=="probable"){
       if(cat=="cat"){species_list<-subset(indata, indata$cat>1)
       } 
-        if(cat=="cat3"){
-      species_list<-subset(indata, indata$cat70>1|indata$cat90>1|indata$cat2010b>1)
+      if(cat=="cat3"){
+        species_list<-subset(indata, indata$cat70>1|indata$cat90>1|indata$cat2010b>1)
       }
     }
     if(level=="confirmed"){
@@ -74,7 +73,7 @@ limit2chequerboard.britain<-function(indata) {
     if(level=="B"){
       species_list<-subset(indata, indata$cat)
     }
-    species_list<-unique(indata$speccode)
+    species_list<-unique(species_list$speccode)
     indata<-subset(indata, indata$speccode %in% species_list)
     return(indata)
   }
@@ -353,31 +352,30 @@ limit2chequerboard.britain<-function(indata) {
    #x column with data from var want to plot
    ##could also change this to plot multiple boxplots at once?
    
-  boxplot_range_change<-function(indata, habitats,plotvar,x, savename=NULL, colours, y1, y2){
-   
-  
-  library(ggplot2)
-  library(gridExtra)
-  library(grid)
-  library(lattice)
-   
-  windows()
-  
-  ggplot(sp_trends, aes(x=Habitat, y=sp_trends[,x], fill=Habitat)) + geom_boxplot(notch=F, outlier.shape =NA)+
-   scale_fill_manual(name="Habitat", values=colours)+
-    theme(plot.margin=unit(c(0.5, 0.5, 0.5, 0.5), "cm")) +
-    scale_y_continuous(limits=c(y1,y2))
-    theme_bw() +
-    theme(text = element_text(family = "serif"))+
-    ylab(plotvar)+
-    theme(panel.grid.major = element_blank(),
-          panel.grid.minor = element_blank(),
-          panel.background = element_blank(),
-          axis.text.x=element_text(angle=90, hjust=1),
-          legend.background = element_rect(fill = NA), legend.key = element_blank())
-  
-  }
-  
+   boxplot_range_change<-function(indata, habitats,x, plotvar,savename=NULL, colours, y1, y2){
+     
+     
+     library(ggplot2)
+     library(gridExtra)
+     library(grid)
+     library(lattice)
+     
+     
+     p<-ggplot(sp_trends, aes(x=Habitat, y=sp_trends[,x], fill=Habitat)) + geom_boxplot(notch=F, outlier.shape =NA)+
+       scale_fill_manual(name="Habitat", values=colours)+
+       ylab(plotvar)+
+       theme(plot.margin=unit(c(0.5, 0.5, 0.5, 0.5), "cm")) +
+       scale_y_continuous(limits=c(y1,y2))+
+       theme_bw() +
+       theme(text = element_text(family = "serif"))+
+       theme(panel.grid.major = element_blank(),
+             panel.grid.minor = element_blank(),
+             panel.background = element_blank(),
+             axis.text.x=element_text(angle=90, hjust=1),
+             legend.background = element_rect(fill = NA), legend.key = element_blank())
+     print(p)
+     
+   }
   
   #######function to plot two plots side by side and make them share a legend
   ##took this from the internet but it seems to work well
