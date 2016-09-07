@@ -374,6 +374,7 @@ limit2chequerboard.britain<-function(indata) {
              axis.text.x=element_text(angle=90, hjust=1),
              legend.background = element_rect(fill = NA), legend.key = element_blank())
      print(p)
+     return(p)
      
    }
   
