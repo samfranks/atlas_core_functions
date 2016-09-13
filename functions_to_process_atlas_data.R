@@ -361,7 +361,7 @@ limit2chequerboard.britain<-function(indata) {
      library(lattice)
      
      
-     p<-ggplot(sp_trends, aes(x=Habitat, y=sp_trends[,x], fill=Habitat)) + geom_boxplot(notch=F, outlier.shape =NA)+
+     p<-ggplot(indata, aes(x=Habitat, y=indata[,x], fill=Habitat)) + geom_boxplot(notch=F, outlier.shape =NA)+
        scale_fill_manual(name="Habitat", values=colours)+
        ylab(plotvar)+
        theme(plot.margin=unit(c(0.5, 0.5, 0.5, 0.5), "cm")) +
