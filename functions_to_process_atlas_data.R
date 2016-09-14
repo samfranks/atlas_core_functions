@@ -226,10 +226,10 @@ limit2chequerboard.britain<-function(indata) {
         library(ineq)
     
           #create a matrix for store the information in
-          sp_range<-matrix(nrow=length(sp), ncol=9)
+          sp_range<-matrix(nrow=length(sp), ncol=10)
           
           ##assign column names
-          colnames(sp_range)<-c("cbc_code","mean_index_90","mean_index_10","total_abund_1990","total_abund_2010","mean_diff","sum_diff", "Gini_1990", "Gini_2010")
+          colnames(sp_range)<-c("cbc_code","mean_index_90","mean_index_10","total_abund_1990","total_abund_2010","mean_diff","sum_diff", "Gini_1990", "Gini_2010", "no._squares")
           
           for (i in 1:length(sp)){
             sp_hab<-subset(hab, hab[,2]==sp[i])
@@ -247,6 +247,7 @@ limit2chequerboard.britain<-function(indata) {
             ##get Gini coefficient for every species
             sp_range[i,8]<-ineq(sp_hab[,3], type="Gini")
             sp_range[i,9]<-ineq(sp_hab[,4], type="Gini")
+            sp_range[i,10]<-length(sp_hab[,1])
           }
           ##change to data frame
           sp_range<-as.data.frame(sp_range)
@@ -256,10 +257,23 @@ limit2chequerboard.britain<-function(indata) {
           ##don't know why.....
           sp_range[,1]<-sp
           
+          ##option to exclude rare species
+          if (restrict_range==TRUE){
+            sp_range<-sp_range[sp_range$no._squares>restricted_range_limit|sp_range$no._squares>restricted_range_limit,]
+          } 
           
           ##percentage change
-          sp_range$change90to2010<-(sp_range$mean_index_10-sp_range$mean_index_90)/sp_range$mean_index_90
-    
+          sp_range$change90to2010<-(sp_range$total_abund_2010-sp_range$total_abund_1990)/sp_range$total_abund_1990
+          
+          ##log ratio change
+          sp_range$logR90to2010<-rep(NA, length(sp_range[,1]))
+          
+          ##calculate the log ratio
+          for (p in 1:length(sp_range[,1])){
+            if (sp_range$total_abund_1990[p]>0){
+              sp_range$logR90to2010[p]<-log(sp_range$total_abund_2010[p]/sp_range$total_abund_1990[p])
+            }
+          }
       
       }
       return(sp_range)
