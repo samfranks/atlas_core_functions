@@ -213,7 +213,7 @@ limit2chequerboard.britain<-function(indata) {
       ##calculate the log ratio
       for (p in 1:length(sp_range[,1])){
         if (sp_range$PA90[p]>0){
-          sp_range$logR90to2010[p]<-log(sp_range$PA2010[p]/sp_range$PA90[p])
+          sp_range$logR90to2010[p]<-log10(sp_range$PA2010[p]/sp_range$PA90[p])
         }
       }}
       if(type=="abundance"){
@@ -271,7 +271,7 @@ limit2chequerboard.britain<-function(indata) {
           ##calculate the log ratio
           for (p in 1:length(sp_range[,1])){
             if (sp_range$total_abund_1990[p]>0){
-              sp_range$logR90to2010[p]<-log(sp_range$total_abund_2010[p]/sp_range$total_abund_1990[p])
+              sp_range$logR90to2010[p]<-log10(sp_range$total_abund_2010[p]/sp_range$total_abund_1990[p])
             }
           }
       
@@ -323,11 +323,11 @@ limit2chequerboard.britain<-function(indata) {
     for (p in 1:length(sp_range[,1])){
       if (sp_range$PA70[p]>0){
         
-        sp_range$logR70to2010[p]<-log(sp_range$PA2010[p]/sp_range$PA70[p])
+        sp_range$logR70to2010[p]<-log10(sp_range$PA2010[p]/sp_range$PA70[p])
         
       }
       if (sp_range$PA90[p]>0){
-        sp_range$logR90to2010[p]<-log(sp_range$PA2010[p]/sp_range$PA90[p])
+        sp_range$logR90to2010[p]<-log10(sp_range$PA2010[p]/sp_range$PA90[p])
       }
     }
     
